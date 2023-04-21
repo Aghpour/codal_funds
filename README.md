@@ -1,2 +1,2 @@
 # codal_funds
-download monthly funds reports
+download monthly reports
