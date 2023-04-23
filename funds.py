@@ -1,4 +1,3 @@
-# https://codepal.ai/code-refactor
 import requests
 import urllib.parse
 import json
