@@ -10,7 +10,7 @@ import glob
 
 logging.basicConfig(level=logging.INFO)
 
-symbols = ['آگاس', 'کاردان']
+symbols = ['آگاس', 'کاردان']  # put your desired symbols here 
 headers = {"User-Agent" : "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/111.0"}
 download_failed = []
 main_dir = str(Path.home() / "Downloads")
