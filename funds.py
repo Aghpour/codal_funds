@@ -14,7 +14,7 @@ symbols = ['آگاس', 'کاردان']  # put your desired symbols here
 headers = {"User-Agent" : "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/111.0"}
 download_failed = []
 main_dir = str(Path.home() / "Downloads")
-links0 = {}
+#links0 = {}
 def convert(symbol):
     """
     Convert symbol text to hex
@@ -75,15 +75,16 @@ def get_links_for_page(converted_symbol, page):
     response = requests.get(page_url, headers=headers)
     reports = json.loads(response.text)['Letters']
     
+    links = {} #define links instead of links0 in each iteration so it wont accumulate
     for report in reports:
         AttachmentUrl = report['AttachmentUrl']
         Title = report['Title'].replace('/', '')
         TracingNo = report['TracingNo']
-        links0[TracingNo] = [AttachmentUrl, Title]
-    logging.info(f'Found {len(links0)} links for page {page+1}')
-    return links0
+        links[TracingNo] = [f'https://www.codal.ir{AttachmentUrl}', Title]
+    logging.info(f'Found {len(links)} links for page {page+1}')
+    return links
 
-def get_download_links(ticker_dir, symbol, links0):
+def get_download_links(ticker_dir, symbol, links):
     """
     Get the download links for a list of links
     :param links: A list of links
@@ -93,7 +94,7 @@ def get_download_links(ticker_dir, symbol, links0):
     failed_links = []
     #files = os.listdir(ticker_dir)
     files = [f.split('.')[0] for f in os.listdir(ticker_dir)]
-    for key, value in links0.items():
+    for key, value in links.items():
         f_name = f'{symbol} {value[1]} {key}'
         if f_name in files:
             continue
@@ -151,8 +152,9 @@ for symbol in symbols:
     folder = make_dir(symbol)
     initial_file_count = file_counter(folder)
     pages = get_pages_count(symbol, converted)
+    page_links = {} #added to avoid dupliction
     for page in range(pages):
-        page_links = get_links_for_page(converted, page)
+        page_links.update(get_links_for_page(converted, page))
     download_links = get_download_links(folder, symbol, page_links)
     download_files(symbol, download_links)
     final_file_count = file_counter(folder)
