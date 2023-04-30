@@ -80,7 +80,7 @@ def get_links_for_page(converted_symbol, page):
         AttachmentUrl = report['AttachmentUrl']
         Title = report['Title'].replace('/', '')
         TracingNo = report['TracingNo']
-        links[TracingNo] = [f'https://www.codal.ir{AttachmentUrl}', Title]
+        links[TracingNo] = [AttachmentUrl, Title]
     logging.info(f'Found {len(links)} links for page {page+1}')
     return links
 
